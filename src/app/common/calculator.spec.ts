@@ -56,7 +56,6 @@ describe("Vitest Fundamentals", () => {
     const result2 = calculator.add(2, 3);
     expect(result2).toBe(5);
     expect(spy).toHaveBeenCalledOnce();
-
   })
 
   it("shows how mockReset() works for pure mocks", () => {
