@@ -36,6 +36,9 @@ describe('CoursesCardList', () => {
     expect(titleEl.textContent).toBe("Beginner Course");
   });
 
+  it('should display message when no courses', () => {
+
+  });
 
 
 });
