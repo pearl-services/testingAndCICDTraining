@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'courses-card-list',
-  standalone: true,
   templateUrl: './courses-card-list.html',
   styleUrl: './courses-card-list.scss',
   imports: [RouterLink],
@@ -14,7 +13,7 @@ import { RouterLink } from '@angular/router';
 export class CoursesCardList {
   courses = input.required<Course[]>();
   courseEdited = output();
-  
+
   private dialog = inject(Dialog);
 
   editCourse(course: Course) {

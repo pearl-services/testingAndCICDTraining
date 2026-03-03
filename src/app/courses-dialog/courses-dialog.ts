@@ -6,20 +6,19 @@ import { form, required, submit,FormField} from '@angular/forms/signals';
 
 @Component({
   selector: 'courses-dialog',
-  standalone: true,
   imports: [FormField],
   templateUrl: './courses-dialog.html',
   styleUrl: './courses-dialog.scss',
 })
 export class CoursesDialog {
   private coursesService = inject(CoursesService);
-  private dialogRef = inject(DialogRef<Course>); 
+  private dialogRef = inject(DialogRef<Course>);
   public data = inject<{ course: Course }>(DIALOG_DATA);
 
   courseModel = signal<CourseData>({
     description: this.data.course.titles.description ?? '',
     category: this.data.course.category ?? '',
-    releasedAt: new Date().toISOString().split('T')[0], 
+    releasedAt: new Date().toISOString().split('T')[0],
     longDescription: this.data.course.titles.longDescription ?? ''
   });
 
@@ -37,9 +36,9 @@ export class CoursesDialog {
   async save() {
     await submit(this.courseForm, async (f) => {
       const val = f().value();
-      
+
       const changes: Partial<Course> = {
-        category: val.category as any, 
+        category: val.category as any,
         titles: {
           description: val.description,
           longDescription: val.longDescription

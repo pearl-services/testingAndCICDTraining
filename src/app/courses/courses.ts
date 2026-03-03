@@ -7,7 +7,6 @@ import { CourseCategory } from '../model/course';
 
 @Component({
   selector: 'courses',
-  standalone: true,
   imports: [CoursesCardList, TabsComponent],
   templateUrl: './courses.html',
   styleUrls: ['./courses.scss']
