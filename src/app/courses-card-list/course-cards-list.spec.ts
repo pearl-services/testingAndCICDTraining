@@ -17,7 +17,7 @@ describe('CoursesCardList', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CoursesCardList],
+      imports: [CoursesCardList, CoursesDialog],
       providers: [provideRouter([])]
     }).compileComponents();
 
@@ -44,5 +44,17 @@ describe('CoursesCardList', () => {
     expect(msg.nativeElement.textContent).toContain("No courses found");
   });
 
+  it('should open dialog when clicking the edit button', () => {
+    const btn = de.query(By.css(".course-card:first-child .edit-btn"));
+    btn.nativeElement.click();
+    fixture.detectChanges();
+
+    const form = document.querySelectorAll(".course-form");
+    expect(form, "The edit course form should be visible.").toBeTruthy();
+  });
 
 });
+
+
+
+
