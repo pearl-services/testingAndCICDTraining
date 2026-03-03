@@ -1,8 +1,7 @@
 import { Directive, ElementRef, HostListener, input } from '@angular/core';
 
 @Directive({
-  selector: '[appHighlight]',
-  standalone: true
+  selector: '[appHighlight]'
 })
 export class HighlightDirective {
   highlightColor = input<string>('rgb(0, 128, 0)');

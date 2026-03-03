@@ -34,11 +34,7 @@ describe('Courses', () => {
     fixture.detectChanges();
   });
 
-  it('should load courses and filter by category', async () => {
-
-  });
-
-  it('should show advanced course when tab clicked', async () => {
+  it('should load courses and filter by category', () => {
 
   });
 

@@ -6,7 +6,6 @@ import { form, required, submit,FormField} from '@angular/forms/signals';
 
 @Component({
   selector: 'courses-dialog',
-  standalone: true,
   imports: [FormField],
   templateUrl: './courses-dialog.html',
   styleUrl: './courses-dialog.scss',
