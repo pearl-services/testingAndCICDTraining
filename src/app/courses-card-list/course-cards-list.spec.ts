@@ -37,7 +37,11 @@ describe('CoursesCardList', () => {
   });
 
   it('should display message when no courses', () => {
-
+    fixture.componentRef.setInput('courses', []);
+    fixture.detectChanges();
+    const msg = de.query(By.css(".no-courses"));
+    expect(msg).toBeTruthy();
+    expect(msg.nativeElement.textContent).toContain("No courses found");
   });
 
 
