@@ -34,8 +34,15 @@ describe('Courses', () => {
     fixture.detectChanges();
   });
 
-  it('should load courses and filter by category', () => {
-
+  it('should load courses and filter by category', async () => {
+    const req = httpMock.expectOne("/api/courses");
+    req.flush({payload: MOCK_COURSES});
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const titles = de.queryAll(By.css(".course-card .card-header"));
+    expect(titles).toHaveLength(1);
+    const titleEl = titles[0].nativeElement;
+    expect(titleEl.textContent).toBe("Beginner Course");
   });
 
   it('should show advanced courses when tab clicked', () => {
