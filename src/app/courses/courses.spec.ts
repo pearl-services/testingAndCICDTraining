@@ -45,9 +45,23 @@ describe('Courses', () => {
     expect(titleEl.textContent).toBe("Beginner Course");
   });
 
-  it('should show advanced courses when tab clicked', () => {
+  it('should show advanced courses when tab clicked', async () => {
+    const req = httpMock.expectOne("/api/courses");
+    req.flush({payload: MOCK_COURSES});
+    await fixture.whenStable();
 
+    const btn = de.query(By.css(".tab-link:last-child"));
+    btn.nativeElement.click();
+    fixture.detectChanges();
 
+    const titles = de.queryAll(By.css(".course-card .card-header"));
+    expect(titles).toHaveLength(1);
+    const titleEl = titles[0].nativeElement;
+    expect(titleEl.textContent).toBe("Advanced Course");
+  })
+
+  afterEach(() => {
+    httpMock.verify();
   })
 
 });
