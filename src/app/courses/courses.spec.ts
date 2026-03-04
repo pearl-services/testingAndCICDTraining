@@ -38,4 +38,9 @@ describe('Courses', () => {
 
   });
 
+  it('should show advanced courses when tab clicked', () => {
+
+
+  })
+
 });
