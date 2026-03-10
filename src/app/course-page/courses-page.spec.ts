@@ -92,13 +92,12 @@ describe('CoursePage', () => {
     expect(sortBtn.nativeElement.textContent).toContain('↓');
   });
 
-
-  /*
-
-
-  it('should update page size', () => {
-    component.pageIndex.set(5);
+  it('should update page size', async () => {
+    component.pageIndex.set(1);
     component.pageSize.set(3);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
 
     const selectEl = fixture.debugElement.query(By.css('.items-label select')).nativeElement;
 
@@ -106,10 +105,16 @@ describe('CoursePage', () => {
     selectEl.dispatchEvent(new Event('change'));
 
     fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.pageSize()).toBe(10);
     expect(component.pageIndex()).toBe(0);
   });
+
+  /*
+
+
+
 
   it('should debounce search input (400ms)', async () => {
     await fixture.whenStable();
