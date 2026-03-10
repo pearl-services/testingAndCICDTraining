@@ -46,6 +46,13 @@ describe('CoursePage', () => {
     expect(rows.length).toBe(2);
   });
 
+  it('should show the loading spinner while fetching', async () => {
+    fixture.detectChanges();
+    const spinner = fixture.debugElement.query(By.css('.loading-spinner'));
+    expect(spinner).toBeTruthy();
+    expect(component.loading()).toBe(true);
+  });
+
   it('should navigate to next or previous page', async () => {
     await fixture.whenStable();
     fixture.detectChanges();
@@ -66,35 +73,14 @@ describe('CoursePage', () => {
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
   });
 
-  /*
-
-  it('should update sorting and reset page', async () => {
+  it('should toggle sort direction', async () => {
     fixture.detectChanges();
-    component.pageIndex.set(5);
-
-    component.toggleSort();
-
-    await fixture.whenStable();
-
-    expect(component.sortDirection()).toBe('desc');
-    expect(component.pageIndex()).toBe(0);
-  });
-
-  it('should show the loading spinner while fetching', async () => {
-    fixture.detectChanges();
-    const spinner = fixture.debugElement.query(By.css('.loading-spinner'));
-    expect(spinner).toBeTruthy();
-    expect(component.loading()).toBe(true);
-  });
-
-  it('should toggle sort direction and update the UI arrows', async () => {
-    fixture.detectChanges();
-    let sortBtn = fixture.debugElement.query(By.css('.sort-btn'));
     expect(component.sortDirection()).toBe('asc');
+    let sortBtn = de.query(By.css('.sort-btn'));
     expect(sortBtn.nativeElement.textContent).toContain('↑');
 
-    const sortHeader = fixture.debugElement.query(By.css('.sortable'));
-    sortHeader.triggerEventHandler('click', null);
+    const sortHeader = de.query(By.css('.sortable'));
+    sortHeader.nativeElement.click();
 
     fixture.detectChanges();
     await fixture.whenStable();
@@ -102,11 +88,15 @@ describe('CoursePage', () => {
     expect(component.sortDirection()).toBe('desc');
     expect(component.pageIndex()).toBe(0);
 
-    sortBtn = fixture.debugElement.query(By.css('.sort-btn'));
+    sortBtn = de.query(By.css('.sort-btn'));
     expect(sortBtn.nativeElement.textContent).toContain('↓');
   });
 
-  it('should update pageSize and reset pageIndex when selection changes', () => {
+
+  /*
+
+
+  it('should update page size', () => {
     component.pageIndex.set(5);
     component.pageSize.set(3);
 
@@ -118,12 +108,6 @@ describe('CoursePage', () => {
     fixture.detectChanges();
 
     expect(component.pageSize()).toBe(10);
-    expect(component.pageIndex()).toBe(0);
-  });
-
-  it('should decrement pageIndex when NOT on the first page', () => {
-    component.pageIndex.set(1);
-    component.prevPage();
     expect(component.pageIndex()).toBe(0);
   });
 
