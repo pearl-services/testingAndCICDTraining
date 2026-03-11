@@ -76,7 +76,6 @@ describe('CoursePage', () => {
 
   it('should load lessons on init', async () => {
     await fixture.whenStable();
-    fixture.detectChanges();
 
     expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 0, 3);
     const rows = de.queryAll(By.css('tbody tr'));
@@ -96,13 +95,11 @@ describe('CoursePage', () => {
 
   it('should navigate to next page', async () => {
     await fixture.whenStable();
-    fixture.detectChanges();
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
 
     clickButton(de, ".page-controls button:last-child");
 
     await fixture.whenStable();
-    fixture.detectChanges();
 
     expect(component.pageIndex()).toBe(1);
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 1, 3);
@@ -122,7 +119,6 @@ describe('CoursePage', () => {
     clickButton(de, ".page-controls button:first-child");
 
     await fixture.whenStable();
-    fixture.detectChanges();
 
     expect(component.pageIndex()).toBe(0);
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
@@ -138,7 +134,6 @@ describe('CoursePage', () => {
 
   it('should toggle sort direction', async () => {
     await fixture.whenStable();
-    fixture.detectChanges();
     expect(component.sortDirection()).toBe('asc');
 
     let sortBtn = de.query(By.css('.sort-btn'));
@@ -146,7 +141,6 @@ describe('CoursePage', () => {
 
     clickButton(de, ".sortable");
 
-    fixture.detectChanges();
     await fixture.whenStable();
 
     expect(component.sortDirection()).toBe('desc');
@@ -160,7 +154,6 @@ describe('CoursePage', () => {
 
 
   it('should update page size', async () => {
-    fixture.detectChanges();
     await fixture.whenStable();
 
     const selectEl = fixture.debugElement.query(By.css('.items-label select')).nativeElement;
@@ -168,7 +161,6 @@ describe('CoursePage', () => {
     selectEl.value = '10';
     selectEl.dispatchEvent(new Event('change'));
 
-    fixture.detectChanges();
     await fixture.whenStable();
 
     expect(component.pageSize()).toBe(10);
