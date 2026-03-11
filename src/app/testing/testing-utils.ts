@@ -10,10 +10,13 @@ export function clickButton(de: DebugElement, selector:string, log = false) {
 }
 
 export function getRowDescription(de: DebugElement, index: number, log = false) {
-  const row = de.query(By.css(`tbody tr:nth-child(${index}) .description-cell`));
+  const row = de.query(By.css(`tbody tr:nth-child(${index}) td.description-cell`));
   if (log) {
     console.log(row?.nativeElement?.innerHTML ?? `row with index ${index} not found`);
   }
   return row?.nativeElement?.textContent ?? null;
 }
 
+export function getTableContent(de:DebugElement, selector:string) {
+  return de.queryAll(By.css(selector)).map(el => el?.nativeElement?.textContent ?? "not found");
+}

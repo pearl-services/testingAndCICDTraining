@@ -1,12 +1,12 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {DebugElement} from '@angular/core';
-import {getMockLessonsPage, MOCK_COURSES} from '../testing/testing-data';
+import {getMockLessonsPage, MOCK_COURSES, MOCK_LESSONS} from '../testing/testing-data';
 import {CoursesService} from '../services/courses.service';
 import {CoursePage} from './course-page';
 import {ActivatedRoute} from '@angular/router';
 import {By} from '@angular/platform-browser';
-import {clickButton, getRowDescription} from "../testing/testing-utils";
+import {clickButton, getTableContent} from "../testing/testing-utils";
 
 
 const FIRST_PAGE = getMockLessonsPage(1, '', 'asc', 0, 3);
@@ -46,12 +46,13 @@ describe('CoursePage', () => {
     await fixture.whenStable();
 
     expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 0, 3);
-    const rows = de.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(3);
 
-    expect(getRowDescription(de, 1)).toBe("Lesson 1");
-    expect(getRowDescription(de, 2)).toBe("Lesson 2");
-    expect(getRowDescription(de, 3)).toBe("Lesson 3");
+    const lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons.length).toBe(3);
+
+    expect(lessons[0]).toBe("Lesson 1");
+    expect(lessons[1]).toBe("Lesson 2");
+    expect(lessons[2]).toBe("Lesson 3");
   });
 
 
@@ -65,37 +66,37 @@ describe('CoursePage', () => {
 
   it('should navigate to next page', async () => {
 
-    mockCoursesService.findLessons
-      .mockResolvedValueOnce(FIRST_PAGE)
-      .mockResolvedValueOnce(SECOND_PAGE);
+    mockCoursesService.findLessons.mockReturnValueOnce(FIRST_PAGE);
 
     await fixture.whenStable();
+    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
 
-    let rows = de.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(3);
+    let lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons.length).toBe(3);
 
-    expect(getRowDescription(de, 1)).toBe("Lesson 1");
-    expect(getRowDescription(de, 2)).toBe("Lesson 2");
-    expect(getRowDescription(de, 3)).toBe("Lesson 3");
+    expect(lessons[0]).toBe("Lesson 1");
+    expect(lessons[1]).toBe("Lesson 2");
+    expect(lessons[2]).toBe("Lesson 3");
+
+    mockCoursesService.findLessons.mockReturnValueOnce(SECOND_PAGE);
 
     clickButton(de, ".page-controls button:last-child");
 
     await fixture.whenStable();
 
     expect(component.pageIndex()).toBe(1);
+    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 1, 3);
 
-    rows = de.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(3);
+    lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons.length).toBe(3);
 
-    expect(getRowDescription(de, 1, true)).toBe("Lesson 4");
-    expect(getRowDescription(de, 2, true)).toBe("Lesson 5");
-    //expect(getRowDescription(de, 3)).toBe("Lesson 6");
+    expect(lessons[0]).toBe("Lesson 4");
+    expect(lessons[1]).toBe("Lesson 5");
+    expect(lessons[2]).toBe("Lesson 6");
   });
 
-
-  /*
   it('should navigate to previous page', async () => {
 
     mockCoursesService.findLessons
@@ -107,14 +108,12 @@ describe('CoursePage', () => {
 
     await fixture.whenStable();
 
-    let rows = de.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(3);
+    let lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons.length).toBe(3);
 
-    // assert we are on page 2
-    expect(component.pageIndex()).toBe(1);
-    expect(getRowDescription(de, 1)).toBe("Lesson 4");
-    expect(getRowDescription(de, 2)).toBe("Lesson 5");
-    expect(getRowDescription(de, 3)).toBe("Lesson 6");
+    expect(lessons[0]).toBe("Lesson 4");
+    expect(lessons[1]).toBe("Lesson 5");
+    expect(lessons[2]).toBe("Lesson 6");
 
     // navigate to previous page
     clickButton(de, ".page-controls button:first-child");
@@ -124,92 +123,105 @@ describe('CoursePage', () => {
     expect(component.pageIndex()).toBe(0);
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
 
-    rows = de.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(3);
+    lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons.length).toBe(3);
 
-    expect(getRowDescription(de, 1)).toBe("Lesson 1");
-    expect(getRowDescription(de, 2)).toBe("Lesson 2");
-    expect(getRowDescription(de, 3)).toBe("Lesson 3");
+    expect(lessons[0]).toBe("Lesson 1");
+    expect(lessons[1]).toBe("Lesson 2");
+    expect(lessons[2]).toBe("Lesson 3");
+
   });
 
 
 
 it('should toggle sort direction', async () => {
+
+  mockCoursesService.findLessons.mockReturnValueOnce(FIRST_PAGE);
+
   await fixture.whenStable();
   expect(component.sortDirection()).toBe('asc');
 
-  let sortBtn = de.query(By.css('.sort-btn'));
-  expect(sortBtn.nativeElement.textContent).toContain('↑');
+  mockCoursesService.findLessons.mockReturnValueOnce(MOCK_LESSONS.reverse().slice(0,3));
 
   clickButton(de, ".sortable");
 
   await fixture.whenStable();
 
   expect(component.sortDirection()).toBe('desc');
-  sortBtn = de.query(By.css('.sort-btn'));
-  expect(sortBtn.nativeElement.textContent).toContain('↓');
+  expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'desc', 0, 3);
 
-  const lesson = de.query(By.css("tr:first-child .description-cell"));
+  const lessons = getTableContent(de, "tbody tr td.description-cell");
+  expect(lessons.length).toBe(3);
+  expect(lessons[0]).toBe("Lesson 20");
 
-  expect(lesson.nativeElement.textContent).toBe("Lesson 20");
 });
 
 
-it('should update page size', async () => {
-  await fixture.whenStable();
 
-  const selectEl = fixture.debugElement.query(By.css('.items-label select')).nativeElement;
+  it('should update page size', async () => {
 
-  selectEl.value = '10';
-  selectEl.dispatchEvent(new Event('change'));
+    mockCoursesService.findLessons.mockReturnValueOnce(FIRST_PAGE);
 
-  await fixture.whenStable();
+    await fixture.whenStable();
 
-  expect(component.pageSize()).toBe(10);
-  expect(component.pageIndex()).toBe(0);
+    mockCoursesService.findLessons.mockReturnValueOnce(getMockLessonsPage(1, '', 'asc',0, 10));
 
-  expect(getRowDescription(de, 1)).toBe("Lesson 1");
-  expect(getRowDescription(de, 10)).toBe("Lesson 10");
-});
+    const selectEl = fixture.debugElement.query(By.css('.items-label select')).nativeElement;
+    selectEl.value = '10';
+    selectEl.dispatchEvent(new Event('change'));
 
+    await fixture.whenStable();
 
-it('should debounce search input by 400ms', async () => {
-  vi.useFakeTimers();
+    expect(component.pageSize()).toBe(10);
+    expect(component.pageIndex()).toBe(0);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 10);
 
-  try {
-    // initial component init + first resource load
-    fixture.detectChanges();
+    const lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons.length).toBe(10);
+    expect(lessons[0]).toBe("Lesson 1");
+    expect(lessons[9]).toBe("Lesson 10");
 
-    // check initial page load
-    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
-    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1,'','asc',0, 3);
+  });
 
-    component.onSearch('Lesson 20');
+  /*
 
-    vi.advanceTimersByTime(399);
-    fixture.detectChanges();
+ it('should debounce search input by 400ms', async () => {
+   vi.useFakeTimers();
 
-    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
+   try {
+     // initial component init + first resource load
+     fixture.detectChanges();
 
-    vi.advanceTimersByTime(1);
-    fixture.detectChanges();
+     // check initial page load
+     expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
+     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1,'','asc',0, 3);
 
-    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
-    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, 'Lesson 20', 'asc', 0, 3);
+     component.onSearch('Lesson 20');
 
-    await vi.runAllTimersAsync();
+     vi.advanceTimersByTime(399);
+     fixture.detectChanges();
 
-    const rows = de.queryAll(By.css('tbody tr'));
-    expect(rows.length).toBe(1);
+     expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
 
-    expect(getRowDescription(de, 1)).toBe("Lesson 20");
+     vi.advanceTimersByTime(1);
+     fixture.detectChanges();
 
-  }
-  finally {
-    vi.useRealTimers();
-  }
-});
+     expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
+     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, 'Lesson 20', 'asc', 0, 3);
 
-*/
+     await vi.runAllTimersAsync();
+
+     const rows = de.queryAll(By.css('tbody tr'));
+     expect(rows.length).toBe(1);
+
+     expect(getRowDescription(de, 1)).toBe("Lesson 20");
+
+   }
+   finally {
+     vi.useRealTimers();
+   }
+ });
+
+ */
 
 });
