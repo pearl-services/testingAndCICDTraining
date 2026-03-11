@@ -144,8 +144,7 @@ describe('CoursePage', () => {
     let sortBtn = de.query(By.css('.sort-btn'));
     expect(sortBtn.nativeElement.textContent).toContain('↑');
 
-    const sortHeader = de.query(By.css('.sortable'));
-    sortHeader.nativeElement.click();
+    clickButton(de, ".sortable");
 
     fixture.detectChanges();
     await fixture.whenStable();
