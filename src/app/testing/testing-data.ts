@@ -51,3 +51,31 @@ export const MOCK_TABS: TabData[] = [
   { label: 'Beginner', value: 'beginner' },
   { label: 'Advanced', value: 'advanced' }
 ];
+
+export function getMockLessonsPage (
+  courseId: number,
+  filter = '',
+  sortOrder = 'asc',
+  pageNumber = 0,
+  pageSize = 3
+)  {
+
+  let lessons = MOCK_LESSONS.filter(l => l.courseId === courseId);
+
+  if (filter?.trim()) {
+    console.log(`searching for ${filter}`)
+    const q = filter.toLowerCase();
+    lessons = lessons.filter(l => l.description.toLowerCase().includes(q));
+  }
+
+  lessons = [...lessons].sort((a, b) => {
+    return sortOrder === 'asc' ? a.seqNo - b.seqNo : b.seqNo - a.seqNo;
+  });
+
+  const start = pageNumber * pageSize;
+  const end = start + pageSize;
+
+  return lessons.slice(start, end);
+}
+
+
