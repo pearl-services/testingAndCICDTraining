@@ -63,7 +63,11 @@ describe('CoursePage', () => {
     component = fixture.componentInstance;
   });
 
+  function clickButton(de: DebugElement, selector:string) {
+    const btn = de.query(By.css(selector));
+    btn.nativeElement.click();
 
+  }
 
   function getRowDescription(de: DebugElement, index: number) {
     const row = de.query(By.css(`tbody tr:nth-child(${index}) .description-cell`));
@@ -95,7 +99,8 @@ describe('CoursePage', () => {
     fixture.detectChanges();
     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
 
-    component.nextPage();
+    clickButton(de, ".page-controls button:last-child");
+
     await fixture.whenStable();
     fixture.detectChanges();
 
@@ -112,8 +117,10 @@ describe('CoursePage', () => {
   });
 
   it('should navigate to previous page', async () => {
+
     component.pageIndex.set(1);
-    component.prevPage();
+    clickButton(de, ".page-controls button:first-child");
+
     await fixture.whenStable();
     fixture.detectChanges();
 
