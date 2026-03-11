@@ -179,31 +179,36 @@ describe('CoursePage', () => {
     // expect(getRowDescription(de, 10)).toBe("Lesson 10");
   });
 
-  /*
-  it('should debounce search input (400ms)', async () => {
-    try {
-      vi.useFakeTimers();
 
-      await fixture.whenStable();
+  it('should debounce search input by 400ms', async () => {
+    vi.useFakeTimers();
+
+    try {
+      // initial component init + first resource load
       fixture.detectChanges();
+
+      // check initial page load
+      expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
+      expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1,'','asc',0, 3);
 
       component.onSearch('advanced');
-      vi.advanceTimersByTime(399);
-      expect(mockCoursesService.findLessons).not.toHaveBeenLastCalledWith(1, 'adv', 'asc', 0, 3);
 
-      vi.advanceTimersByTime(1);
-      await fixture.whenStable();
+      vi.advanceTimersByTime(399);
       fixture.detectChanges();
 
-      expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, 'adv', 'asc', 0, 3);
+      expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(1);
+      fixture.detectChanges();
+
+      expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
+      expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, 'advanced', 'asc', 0, 3);
     }
     finally {
-
       vi.useRealTimers();
     }
-
   });
 
-*/
+
 
 });
