@@ -11,6 +11,7 @@ import {clickButton, getTableContent} from "../testing/testing-utils";
 
 const FIRST_PAGE = getMockLessonsPage(1, '', 'asc', 0, 3);
 const SECOND_PAGE = getMockLessonsPage(1, '', 'asc', 1, 3);
+const SEARCH_RESULTS = getMockLessonsPage(1, 'Lesson 20', 'asc',0, 3);
 
 describe('CoursePage', () => {
   let component: CoursePage;
@@ -183,18 +184,19 @@ it('should toggle sort direction', async () => {
 
   });
 
-  /*
 
- it('should debounce search input by 400ms', async () => {
-   vi.useFakeTimers();
+ it.only('should debounce search input by 400ms', async () => {
 
    try {
+
+     vi.useFakeTimers();
+
+     mockCoursesService.findLessons.mockReturnValueOnce(FIRST_PAGE);
+
      // initial component init + first resource load
      fixture.detectChanges();
 
-     // check initial page load
      expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
-     expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1,'','asc',0, 3);
 
      component.onSearch('Lesson 20');
 
@@ -203,6 +205,8 @@ it('should toggle sort direction', async () => {
 
      expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
 
+     mockCoursesService.findLessons.mockReturnValueOnce(SEARCH_RESULTS);
+
      vi.advanceTimersByTime(1);
      fixture.detectChanges();
 
@@ -210,18 +214,18 @@ it('should toggle sort direction', async () => {
      expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, 'Lesson 20', 'asc', 0, 3);
 
      await vi.runAllTimersAsync();
+     fixture.detectChanges();
 
-     const rows = de.queryAll(By.css('tbody tr'));
-     expect(rows.length).toBe(1);
-
-     expect(getRowDescription(de, 1)).toBe("Lesson 20");
-
+     expect(component.lessons()?.length).toBe(1);
+     const lessons = getTableContent(de, "tbody tr td.description-cell");
+     expect(lessons.length).toBe(1);
+     expect(lessons[0]).toBe("Lesson 20");
    }
    finally {
      vi.useRealTimers();
    }
  });
 
- */
+
 
 });
