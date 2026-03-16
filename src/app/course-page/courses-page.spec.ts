@@ -63,4 +63,12 @@ describe('CoursePage', () => {
 
   });
 
+  it('should show the loading spinner while fetching', async () => {
+    fixture.detectChanges();
+    const spinner = de.query(By.css(".loading-spinner"));
+    expect(spinner).toBeTruthy();
+    expect(component.loading()).toBe(true);
+  });
+
+
 });
