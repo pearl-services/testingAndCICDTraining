@@ -14,6 +14,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './course-page.scss',
 })
 export class CoursePage implements OnInit {
+
   private route = inject(ActivatedRoute);
   private coursesService = inject(CoursesService);
   private router = inject(Router);
