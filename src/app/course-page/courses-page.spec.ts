@@ -14,9 +14,36 @@ const SECOND_PAGE = getMockLessonsPage(1, '', 'asc', 1, 3);
 const SEARCH_RESULTS = getMockLessonsPage(1, 'Lesson 20', 'asc',0, 3);
 
 describe('CoursePage', () => {
+  let component: CoursePage;
+  let fixture: ComponentFixture<CoursePage>;
+  let de: DebugElement;
+  let mockCoursesService:any;
 
   beforeEach(async () => {
+    mockCoursesService = {
+      findLessons: vi.fn()
+    };
 
+    await TestBed.configureTestingModule({
+      imports: [CoursePage],
+      providers: [
+        {provide: CoursesService, useValue: mockCoursesService},
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                course: MOCK_COURSES[0]
+              }
+            }
+          }
+        }
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(CoursePage);
+    de = fixture.debugElement;
+    component = fixture.componentInstance;
 
   });
 
