@@ -97,5 +97,38 @@ describe('CoursePage', () => {
 
   });
 
+  it('should navigate to previous page', async () => {
+
+    mockCoursesService.findLessons
+      .mockReturnValueOnce(SECOND_PAGE)
+      .mockReturnValueOnce(FIRST_PAGE);
+
+    component.pageIndex.set(1);
+
+    await fixture.whenStable();
+
+    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
+    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 1, 3);
+
+    clickButton(de,".page-controls button:first-child");
+
+    await fixture.whenStable();
+
+    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
+    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 0, 3);
+
+    const lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons).toHaveLength(3);
+    expect(lessons[0]).toBe("Lesson 1");
+    expect(lessons[1]).toBe("Lesson 2");
+    expect(lessons[2]).toBe("Lesson 3");
+  });
 
 });
+
+
+
+
+
+
+
