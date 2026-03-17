@@ -71,4 +71,31 @@ describe('CoursePage', () => {
   });
 
 
+  it('should navigate to next page', async () => {
+
+    mockCoursesService.findLessons.mockReturnValueOnce(FIRST_PAGE);
+
+    await fixture.whenStable();
+
+    expect(mockCoursesService.findLessons).toHaveBeenCalledOnce();
+    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 0, 3);
+
+    mockCoursesService.findLessons.mockReturnValueOnce(SECOND_PAGE);
+
+    clickButton(de,".page-controls button:last-child");
+
+    await fixture.whenStable();
+
+    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
+    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 1, 3);
+
+    const lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons).toHaveLength(3);
+    expect(lessons[0]).toBe("Lesson 4");
+    expect(lessons[1]).toBe("Lesson 5");
+    expect(lessons[2]).toBe("Lesson 6");
+
+  });
+
+
 });
