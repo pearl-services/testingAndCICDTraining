@@ -53,7 +53,7 @@ describe('CoursePage', () => {
 
     await fixture.whenStable();
 
-    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', "asc", 0, 3);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', "asc", 0, 3);
 
     const lessons = getTableContent(de, "tbody tr td.description-cell");
     expect(lessons).toHaveLength(3);
@@ -78,7 +78,7 @@ describe('CoursePage', () => {
     await fixture.whenStable();
 
     expect(mockCoursesService.findLessons).toHaveBeenCalledOnce();
-    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 0, 3);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
 
     mockCoursesService.findLessons.mockReturnValueOnce(SECOND_PAGE);
 
@@ -87,7 +87,7 @@ describe('CoursePage', () => {
     await fixture.whenStable();
 
     expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
-    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 1, 3);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 1, 3);
 
     const lessons = getTableContent(de, "tbody tr td.description-cell");
     expect(lessons).toHaveLength(3);
@@ -108,20 +108,49 @@ describe('CoursePage', () => {
     await fixture.whenStable();
 
     expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(1);
-    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 1, 3);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 1, 3);
 
     clickButton(de,".page-controls button:first-child");
 
     await fixture.whenStable();
 
     expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
-    expect(mockCoursesService.findLessons).toHaveBeenCalledWith(1, '', 'asc', 0, 3);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'asc', 0, 3);
 
     const lessons = getTableContent(de, "tbody tr td.description-cell");
     expect(lessons).toHaveLength(3);
     expect(lessons[0]).toBe("Lesson 1");
     expect(lessons[1]).toBe("Lesson 2");
     expect(lessons[2]).toBe("Lesson 3");
+  });
+
+  it('should toggle sort direction', async () => {
+
+    mockCoursesService.findLessons.mockReturnValueOnce(FIRST_PAGE);
+
+    await fixture.whenStable();
+
+    expect(component.sortDirection()).toBe("asc");
+
+    mockCoursesService.findLessons.mockReturnValueOnce(
+      MOCK_LESSONS.reverse().slice(0, 3)
+    );
+
+    clickButton(de, ".sortable");
+
+    await fixture.whenStable();
+
+    expect(component.sortDirection()).toBe("desc");
+
+    expect(mockCoursesService.findLessons).toHaveBeenCalledTimes(2);
+    expect(mockCoursesService.findLessons).toHaveBeenLastCalledWith(1, '', 'desc', 0, 3);
+
+    const lessons = getTableContent(de, "tbody tr td.description-cell");
+    expect(lessons).toHaveLength(3);
+    expect(lessons[0]).toBe("Lesson 20");
+    expect(lessons[1]).toBe("Lesson 19");
+    expect(lessons[2]).toBe("Lesson 18");
+
   });
 
 });
