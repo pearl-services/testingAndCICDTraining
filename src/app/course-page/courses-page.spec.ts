@@ -153,6 +153,11 @@ describe('CoursePage', () => {
 
   });
 
+  it('should update page size', async () => {
+
+
+  });
+
 });
 
 
