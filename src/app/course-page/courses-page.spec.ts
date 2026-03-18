@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {DebugElement} from '@angular/core';
 import {getMockLessonsPage, MOCK_COURSES, MOCK_LESSONS} from '../testing/testing-data';
@@ -178,6 +178,18 @@ describe('CoursePage', () => {
     expect(lessons[9]).toBe("Lesson 10");
 
   });
+
+  it('should debounce search input by 400ms', async () => {
+
+    vi.useFakeTimers();
+
+
+
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  })
 
 });
 
