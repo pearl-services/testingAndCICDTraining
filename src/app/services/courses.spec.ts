@@ -26,6 +26,10 @@ describe('CoursesService', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
+  afterEach(() => {
+    httpTestingController.verify();
+  });
+
   it('should retrieve all courses', async () => {
 
     const promise = service.findAllCourses();
@@ -70,28 +74,34 @@ describe('CoursesService', () => {
     expect(result).toEqual(mockLessons.payload);
   });
 
-  afterEach(() => {
-    httpTestingController.verify();
-  });
+
 
   it('should save course', async () => {
-    const initialCourse = createCourse({ id: 12, titles: { description: 'Old Title' } });
-    const secondCourse = createCourse({ id: 1, titles: { description: 'Stay Same' } });
+    const firstCourse = createCourse({ id: 1, titles: { description: 'Old Title' } });
+    const secondCourse = createCourse({ id: 2, titles: { description: 'Stay Same' } });
+
+
+    const loadCoursesPromise = service.findAllCourses();
+    const loadCoursesReq = httpTestingController.expectOne('/api/courses');
+    expect(loadCoursesReq.request.method).toBe('GET');
+    loadCoursesReq.flush({ payload: [firstCourse, secondCourse] });
+    await loadCoursesPromise;
 
     const changes: Partial<Course> = {
       titles: { description: 'New Title' }
     };
-    const updatedCourse = { ...initialCourse, ...changes };
-    (service as any).courses.set([initialCourse, secondCourse]);
 
-    const savePromise = service.saveCourse(12, changes);
-    const req = httpTestingController.expectOne('/api/courses/12');
-    req.flush(updatedCourse);
+    const updatedCourse = {...firstCourse, ...changes};
+
+    const savePromise = service.saveCourse(1, changes);
+    const saveCourseReq = httpTestingController.expectOne('/api/courses/1');
+    expect(saveCourseReq.request.method).toBe('PUT');
+    saveCourseReq.flush(updatedCourse);
     await savePromise;
 
     const allCourses = service.allCourses();
     expect(allCourses[0].titles.description).toBe('New Title');
-    expect(allCourses.find(c => c.id === 1)?.titles.description).toBe('Stay Same');
+    expect(allCourses.find(c => c.id === 2)?.titles?.description).toBe('Stay Same');
   });
 
 
