@@ -31,6 +31,16 @@ describe('CoursesService', () => {
 
   it('should retrieve all courses', async () => {
 
+    const coursesPromise = service.reloadAllCourses();
+
+    const req = httpTestingController.expectOne("/api/courses");
+    expect(req.request.method).toBe("GET");
+    req.flush({payload: MOCK_COURSES});
+
+    const result = await coursesPromise;
+
+    expect(result).toBe(MOCK_COURSES);
+    expect(service.allCourses()).toEqual(MOCK_COURSES);
   });
 
 
