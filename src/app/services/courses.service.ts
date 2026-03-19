@@ -8,8 +8,9 @@ import { Lesson } from "../model/lesson";
   providedIn: 'root'
 })
 export class CoursesService {
+
   private http = inject(HttpClient);
-  
+
   private courses = signal<Course[]>([]);
   readonly allCourses = this.courses.asReadonly();
 
