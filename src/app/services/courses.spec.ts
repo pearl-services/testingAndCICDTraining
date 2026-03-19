@@ -43,6 +43,18 @@ describe('CoursesService', () => {
     expect(service.allCourses()).toEqual(MOCK_COURSES);
   });
 
+  it('should get course by Id', async () => {
+    const coursePromise = service.findCourseById(1);
+
+    const req = httpTestingController.expectOne('/api/courses/1');
+    expect(req.request.method).toBe('GET')
+    req.flush(MOCK_COURSES[0]);
+
+    const course = await coursePromise;
+    expect(course.id).toBe(1);
+    expect(course.titles.description).toBe('Beginner Course');
+  });
+
 
 });
 
