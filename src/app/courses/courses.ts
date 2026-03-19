@@ -35,7 +35,7 @@ export class Courses implements OnInit {
   }
 
   async reloadCourses() {
-    this.courseService.findAllCourses();
+    this.courseService.reloadAllCourses();
   }
 
   onTabChanged(newTab: CourseCategory) {

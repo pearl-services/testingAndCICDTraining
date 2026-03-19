@@ -20,7 +20,7 @@ export class CoursesService {
     );
   }
 
-  async findAllCourses(): Promise<Course[]> {
+  async reloadAllCourses(): Promise<Course[]> {
     const res = await firstValueFrom(
       this.http.get<{ payload: Course[] }>('/api/courses')
     );

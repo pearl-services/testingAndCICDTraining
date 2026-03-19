@@ -11,19 +11,18 @@ describe('CoursesService', () => {
   let service: CoursesService;
   let httpTestingController: HttpTestingController;
 
-  const mockCourse: Course = MOCK_COURSES[0];
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         CoursesService,
         provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+        provideHttpClientTesting()
+      ]
     });
 
     service = TestBed.inject(CoursesService);
     httpTestingController = TestBed.inject(HttpTestingController);
+
   });
 
   afterEach(() => {
