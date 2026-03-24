@@ -1,12 +1,10 @@
-
-import {describe, it, beforeEach, afterEach, expect} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it} from 'vitest';
 import {CoursesService} from './courses.service';
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {Course} from '../model/course';
 import {createCourse, MOCK_COURSES} from '../testing/testing-data';
 import {TestBed} from '@angular/core/testing';
 import {provideHttpClient} from '@angular/common/http';
-import {request} from 'express';
 
 describe('CoursesService', () => {
   let service: CoursesService;
@@ -71,7 +69,7 @@ describe('CoursesService', () => {
     expect(params.get('pageNumber')).toBe('2');
     expect(params.get('pageSize')).toBe('10');
 
-    const mockLessons = {payload: [{id:12, description: "Lesson 1"}]};
+    const mockLessons = {payload: [{id: 12, description: "Lesson 1"}]};
 
     req.flush(mockLessons);
 
@@ -79,9 +77,33 @@ describe('CoursesService', () => {
 
     expect(result).toBe(mockLessons.payload);
 
-
   })
 
+  it('should save course', async () => {
+    const course1 = createCourse({id: 1, titles: {description: 'Initial Title'}});
+    const course2 = createCourse({id: 2, titles: {description: 'Stay Same'}});
+
+    const loadPromise = service.reloadAllCourses();
+    const loadReq = httpTestingController.expectOne("/api/courses");
+    loadReq.flush({payload: [course1, course2]});
+    await loadPromise;
+
+    const changes: Partial<Course> = {
+      titles: {description: "New Title"}
+    }
+
+    const savePromise = service.saveCourse(1, changes);
+    const saveReq = httpTestingController.expectOne("/api/courses/1");
+    expect(saveReq.request.method).toBe('PUT');
+    expect(saveReq.request.body).toBe(changes);
+    saveReq.flush({...course1, ...changes});
+    await savePromise;
+
+    const allCourses = service.allCourses();
+    expect(allCourses[0].titles.description).toBe("New Title");
+    expect(allCourses[1].id).toBe(2);
+    expect(allCourses[1].titles.description).toBe('Stay Same');
+  })
 
 });
 

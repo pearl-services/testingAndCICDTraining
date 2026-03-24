@@ -35,8 +35,9 @@ export class CoursesService {
     );
 
     this.courses.update(courses =>
-      courses.map(course => course.id === courseId ? { ...course, ...updatedCourse } : course)
-    );
+      courses.map(course =>
+        course.id === courseId ? { ...course, ...updatedCourse } : course)
+    )
 
     return updatedCourse;
   }
