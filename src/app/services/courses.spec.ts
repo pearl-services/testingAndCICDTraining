@@ -17,18 +17,17 @@ describe('CoursesService', () => {
         provideHttpClient(),
         provideHttpClientTesting()
       ]
-    });
+    })
 
     service = TestBed.inject(CoursesService);
     httpTestingController = TestBed.inject(HttpTestingController);
-
   });
 
   afterEach(() => {
     httpTestingController.verify();
   });
 
-  it('should retrieve all courses', async () => {
+  it('should load all courses', async () => {
 
     const coursesPromise = service.reloadAllCourses();
 
@@ -39,7 +38,8 @@ describe('CoursesService', () => {
     const result = await coursesPromise;
 
     expect(result).toBe(MOCK_COURSES);
-    expect(service.allCourses()).toEqual(MOCK_COURSES);
+    expect(service.allCourses()).toBe(MOCK_COURSES);
+
   });
 
   it('should get course by Id', async () => {
