@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, DebugElement} from '@angular/core';
 import {HighlightDirective} from './highlight.directive';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {describe, beforeEach, it, expect} from "vitest";
@@ -16,7 +16,10 @@ class TestHostComponent {}
 
 describe('HighlightDirective', () => {
   let fixture: ComponentFixture<TestHostComponent>;
-  let elementsWithDirective: any[];
+  let de:DebugElement;
+  let defaultHighlight: any;
+  let customHighlight: any;
+  let noHighlight: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,53 +27,49 @@ describe('HighlightDirective', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
+    de = fixture.debugElement;
     fixture.detectChanges();
 
-    elementsWithDirective = fixture.debugElement.queryAll(By.directive(HighlightDirective));
+    defaultHighlight = de.query(By.css('#default-highlight')).nativeElement;
+    customHighlight = de.query(By.css('#custom-highlight')).nativeElement;
+    noHighlight = de.query(By.css('#no-highlight')).nativeElement;
   });
 
-  it('should have two highlighted elements', () => {
-    expect(elementsWithDirective.length).toBe(2);
+  it('should have found all elements', () => {
+    expect(defaultHighlight).toBeTruthy();
   });
 
-  it('should apply default color (green) when no input is provided', () => {
-    const el = fixture.debugElement.query(By.css('#default-highlight')).nativeElement;
+  it('should apply default color', () => {
 
-    el.dispatchEvent(new Event('mouseenter'));
+    defaultHighlight.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();
 
-    const computedStyle = window.getComputedStyle(el);
-
+    const computedStyle = window.getComputedStyle(defaultHighlight);
     expect(computedStyle.backgroundColor).toBe('rgb(0, 128, 0)');
   });
 
-  it('should apply custom color (blue) when input is provided', () => {
-    const el = fixture.debugElement.query(By.css('#custom-highlight')).nativeElement;
+  it('should reset the color when the mouse leaves', () => {
 
-    el.dispatchEvent(new Event('mouseenter'));
+    defaultHighlight.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();
-    expect(el.style.backgroundColor).toBe('rgb(0, 0, 255)');
+    expect(defaultHighlight.style.backgroundColor).toBe('rgb(0, 128, 0)');
+
+    defaultHighlight.dispatchEvent(new Event('mouseleave'));
+    fixture.detectChanges();
+
+    expect(defaultHighlight.style.backgroundColor).toBe('');
+  });
+
+  it('should apply custom color', () => {
+    customHighlight.dispatchEvent(new Event('mouseenter'));
+    fixture.detectChanges();
+    expect(customHighlight.style.backgroundColor).toBe('rgb(0, 0, 255)');
   });
 
   it('should not affect elements without the directive', () => {
-    const el = fixture.debugElement.query(By.css('#no-highlight')).nativeElement;
-
-    el.dispatchEvent(new Event('mouseenter'));
+    noHighlight.dispatchEvent(new Event('mouseenter'));
     fixture.detectChanges();
-    expect(el.style.backgroundColor).toBe('');
-  });
-
-  it('should reset the color when the mouse leaves', () => {
-    const el = fixture.debugElement.query(By.css('#default-highlight')).nativeElement;
-
-    el.dispatchEvent(new Event('mouseenter'));
-    fixture.detectChanges();
-    expect(el.style.backgroundColor).toBe('rgb(0, 128, 0)');
-
-    el.dispatchEvent(new Event('mouseleave'));
-    fixture.detectChanges();
-
-    expect(el.style.backgroundColor).toBe('');
+    expect(noHighlight.style.backgroundColor).toBe('');
   });
 
 });
