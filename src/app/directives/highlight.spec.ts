@@ -37,6 +37,8 @@ describe('HighlightDirective', () => {
 
   it('should have found all elements', () => {
     expect(defaultHighlight).toBeTruthy();
+    expect(customHighlight).toBeTruthy();
+    expect(noHighlight).toBeTruthy();
   });
 
   it('should apply default color', () => {
