@@ -55,5 +55,17 @@ describe('HighlightDirective', () => {
     expect(defaultHighlight.style.backgroundColor).toBe("");
   })
 
+  it('should apply custom color', () => {
+    customHighlight.dispatchEvent(new Event("mouseenter"));
+    fixture.detectChanges();
+    expect(customHighlight.style.backgroundColor).toBe("rgb(0, 0, 255)");
+  })
+
+  it('should not affect elements without the directive', () => {
+    noHighlight.dispatchEvent(new Event("mouseenter"));
+    fixture.detectChanges();
+    expect(noHighlight.style.backgroundColor).toBe("");
+  })
+
 
 });
