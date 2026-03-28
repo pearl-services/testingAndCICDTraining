@@ -16,10 +16,10 @@ export class CoursesDialog {
   public data = inject<{ course: Course }>(DIALOG_DATA);
 
   courseModel = signal<CourseData>({
-    description: this.data.course.titles.description ?? '',
-    category: this.data.course.category ?? '',
-    releasedAt: new Date().toISOString().split('T')[0],
-    longDescription: this.data.course.titles.longDescription ?? ''
+    description: this.data?.course?.titles?.description ?? '',
+    category: this.data?.course?.category ?? '',
+    releasedAt: new Date().toLocaleDateString('en-CA'),
+    longDescription: this.data?.course?.titles?.longDescription ?? ''
   });
 
   courseForm = form(this.courseModel, (schemaPath) => {
