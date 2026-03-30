@@ -9,7 +9,7 @@
     </header>
 
     <section class="modal-body">
-        <div class="form-field">
+        <div class="form-field description">
             <input type="text" placeholder="Course Description" [formField]="courseForm.description">
             @if (courseForm.description().touched() && courseForm.description().invalid()) {
             <ul class="error-list">
@@ -20,7 +20,7 @@
             }
         </div>
 
-        <div class="form-field">
+        <div class="form-field category">
             <select [formField]="courseForm.category">
                 <option value="BEGINNER">Beginner</option>
                 <option value="INTERMEDIATE">Intermediate</option>
@@ -35,7 +35,7 @@
             }
         </div>
 
-        <div class="form-field">
+        <div class="form-field released-at">
             <input type="date" [formField]="courseForm.releasedAt">
             @if (courseForm.releasedAt().touched() && courseForm.releasedAt().invalid()) {
             <ul class="error-list">
@@ -46,7 +46,7 @@
             }
         </div>
 
-        <div class="form-field">
+        <div class="form-field long-description">
             <textarea placeholder="Long Description" [formField]="courseForm.longDescription"></textarea>
             @if (courseForm.longDescription().touched() && courseForm.longDescription().invalid()) {
             <ul class="error-list">
