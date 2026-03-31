@@ -39,5 +39,14 @@ describe('CoursesDialog', () => {
     fixture.detectChanges();
   })
 
+  it('should initialize the form with course data', () => {
+    expect(component.courseForm.description().value()).toBe("Beginner Course");
+    expect(component.courseForm.category().value()).toBe("BEGINNER");
+    expect(component.courseForm.releasedAt().value())
+      .toBe(new Date().toLocaleDateString("en-CA"));
+    expect(component.courseForm.longDescription().value()).toBe("Theory");
+    expect(component.courseForm().valid()).toBe(true);
+  })
+
 
 });
