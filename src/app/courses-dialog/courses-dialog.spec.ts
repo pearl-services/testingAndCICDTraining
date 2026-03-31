@@ -8,6 +8,7 @@ import {DIALOG_DATA, DialogRef} from '@angular/cdk/dialog';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
 import {clickButton} from '../testing/testing-utils';
+import {FieldState} from '@angular/forms/signals';
 
 describe('CoursesDialog', () => {
   let component: CoursesDialog;
@@ -48,5 +49,24 @@ describe('CoursesDialog', () => {
     expect(component.courseForm().valid()).toBe(true);
   })
 
+  it('should handle all form field errors', async () => {
+    testFieldError(component.courseForm.description(), ".description", "Description is required");
+    testFieldError(component.courseForm.category(), ".category", 'Category is required');
+    testFieldError(component.courseForm.releasedAt(), ".released-at", 'Release Date is required');
+    testFieldError(component.courseForm.longDescription(), ".long-description", 'Long Description is required');
+  })
+
+  function testFieldError(fieldState:FieldState<any>, selector:string, message:string) {
+    fieldState.value.set('');
+    fieldState.markAsTouched();
+    fixture.detectChanges();
+
+    const errorList = de.query(By.css(`${selector} .error-list`));
+    expect(errorList).toBeTruthy();
+    expect(errorList.nativeElement.textContent).toContain(message);
+
+    const saveBtn = de.query(By.css(".btn-primary"))?.nativeElement
+    expect(saveBtn?.disabled).toBe(true);
+  }
 
 });
