@@ -49,6 +49,23 @@ describe('CoursesDialog', () => {
     expect(component.courseForm().valid()).toBe(true);
   })
 
+  it('should call saveCourse and close dialog', async () => {
+    component.courseForm.description().value.set("New Course Title");
+    fixture.detectChanges();
+
+    clickButton(de, ".btn-primary");
+    await fixture.whenStable();
+
+    expect(mockCoursesService.saveCourse).toHaveBeenLastCalledWith(
+      1,
+      expect.objectContaining({
+        titles: expect.objectContaining({description: "New Course Title"})
+      })
+    )
+    expect(mockDialogRef.close).toHaveBeenCalled();
+
+  })
+
   it('should handle all form field errors', async () => {
     testFieldError(component.courseForm.description(), ".description", "Description is required");
     testFieldError(component.courseForm.category(), ".category", 'Category is required');
