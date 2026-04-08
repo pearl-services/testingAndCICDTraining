@@ -1,23 +1,13 @@
 <div class="container">
-  <nav class="tab-nav">
-    <button 
-      class="tab-link" 
-      [class.active]="activeTab() === 'beginner'"
-      (click)="activeTab.set('beginner')">
-      Beginner
-    </button>
-    <button 
-      class="tab-link" 
-      [class.active]="activeTab() === 'advanced'"
-      (click)="activeTab.set('advanced')">
-      Advanced
-    </button>
-  </nav>
+<tabs
+    [tabs]="courseTabs"
+    [(activeTab)]="activeTab"
+    (tabChanged)="onTabChanged($event)" />
 
   <main class="tab-content">
     @if (activeTab() === 'beginner') {
       @if (beginnerCourses().length > 0) {
-        <app-courses-card-list 
+        <courses-card-list
           (courseEdited)="reloadCourses()"
           [courses]="beginnerCourses()"/>
       } @else {
@@ -27,7 +17,7 @@
 
     @if (activeTab() === 'advanced') {
       @if (advancedCourses().length > 0) {
-        <app-courses-card-list
+        <courses-card-list
           (courseEdited)="reloadCourses()"
           [courses]="advancedCourses()"/>
       } @else {

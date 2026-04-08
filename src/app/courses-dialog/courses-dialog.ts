@@ -1,58 +1,56 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { Course } from '../model/course';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { tap } from 'rxjs';
-import { CoursesService } from '../services/courses';
+import { Component, inject, signal } from '@angular/core';
+import { Course, CourseData } from '../model/course';
+import { CoursesService } from '../services/courses.service';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { form, required, submit,FormField} from '@angular/forms/signals';
 
 @Component({
-  selector: 'app-courses-dialog',
-  imports: [ReactiveFormsModule],
+  selector: 'courses-dialog',
+  imports: [FormField],
   templateUrl: './courses-dialog.html',
   styleUrl: './courses-dialog.scss',
 })
-export class CoursesDialog implements OnInit {
-  course: Course;
-  form: any;
-  constructor(
-    private fb: FormBuilder,
-    private coursesService: CoursesService,
-    @Inject('DIALOG_DATA') public data: { course: Course },
-    @Inject('DIALOG_REF') private dialogRef: any
-  ) {
-    this.course = data.course;
-  }
+export class CoursesDialog {
+  private coursesService = inject(CoursesService);
+  private dialogRef = inject(DialogRef<Course>);
+  public data = inject<{ course: Course }>(DIALOG_DATA);
 
-  ngOnInit() {
-    this.form = this.fb.group({
-      description: [this.course.titles.description, Validators.required],
-      category: [this.course.category, Validators.required],
-      releasedAt: [new Date(), Validators.required],
-      longDescription: [this.course.titles.longDescription, Validators.required]
-    });
-  }
+  courseModel = signal<CourseData>({
+    description: this.data?.course?.titles?.description ?? '',
+    category: this.data?.course?.category ?? '',
+    releasedAt: new Date().toLocaleDateString('en-CA'),
+    longDescription: this.data?.course?.titles?.longDescription ?? ''
+  });
+
+  courseForm = form(this.courseModel, (schemaPath) => {
+    required(schemaPath.description,{message: 'Description is required'});
+    required(schemaPath.category,{message: 'Category is required'});
+    required(schemaPath.releasedAt,{message: 'Release Date is required'});
+    required(schemaPath.longDescription,{message: 'Long Description is required'});
+  });
 
   close() {
     this.dialogRef.close();
   }
 
-  save() {
-    if (this.form.invalid) {
-      return;
-    }
+  async save() {
+    await submit(this.courseForm, async (f) => {
+      const val = f().value();
 
-    const val = this.form.value;
-    const changes: Partial<Course> = {
-      category: val.category, 
-      titles: {
-        description: val.description,
-        longDescription: val.longDescription
+      const changes: Partial<Course> = {
+        category: val.category as any,
+        titles: {
+          description: val.description,
+          longDescription: val.longDescription
+        }
+      };
+
+      try {
+        await this.coursesService.saveCourse(this.data.course.id, changes);
+        this.dialogRef.close(val as any);
+      } catch (err) {
+        console.error("Save failed", err);
       }
-    };
-
-    this.coursesService.saveCourse(this.course.id, changes)
-      .pipe(
-        tap(() => this.dialogRef.close(this.form.value))
-      )
-      .subscribe();
+    });
   }
 }

@@ -11,3 +11,12 @@ export interface Course {
   category:string;
   lessonsCount:number;
 }
+
+export interface CourseData {
+  description: string;
+  category: string;
+  releasedAt: string;
+  longDescription: string;
+}
+
+export type CourseCategory = 'beginner' | 'advanced';
