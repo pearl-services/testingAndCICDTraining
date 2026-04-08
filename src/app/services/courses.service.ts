@@ -8,8 +8,9 @@ import { Lesson } from "../model/lesson";
   providedIn: 'root'
 })
 export class CoursesService {
+
   private http = inject(HttpClient);
-  
+
   private courses = signal<Course[]>([]);
   readonly allCourses = this.courses.asReadonly();
 
@@ -19,7 +20,7 @@ export class CoursesService {
     );
   }
 
-  async findAllCourses(): Promise<Course[]> {
+  async reloadAllCourses(): Promise<Course[]> {
     const res = await firstValueFrom(
       this.http.get<{ payload: Course[] }>('/api/courses')
     );
@@ -34,8 +35,9 @@ export class CoursesService {
     );
 
     this.courses.update(courses =>
-      courses.map(course => course.id === courseId ? { ...course, ...updatedCourse } : course)
-    );
+      courses.map(course =>
+        course.id === courseId ? { ...course, ...updatedCourse } : course)
+    )
 
     return updatedCourse;
   }

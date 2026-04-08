@@ -14,6 +14,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './course-page.scss',
 })
 export class CoursePage implements OnInit {
+
   private route = inject(ActivatedRoute);
   private coursesService = inject(CoursesService);
   private router = inject(Router);
@@ -26,11 +27,14 @@ export class CoursePage implements OnInit {
   searchInput = signal('');
 
   searchQuery = toSignal(
-    toObservable(this.searchInput).pipe(
-      debounceTime(400),
-      distinctUntilChanged()
+    toObservable(this.searchInput)
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
     ),
-    { initialValue: '' }
+    {
+      initialValue: ''
+    }
   );
 
   lessonsResource = resource({
@@ -64,20 +68,12 @@ export class CoursePage implements OnInit {
   isFirstPage = computed(() => this.pageIndex() === 0);
   isLastPage = computed(() => this.currentPage() >= this.totalPages());
 
-  constructor() { }
-
   ngOnInit() {
     this.course.set(this.route.snapshot.data["course"]);
   }
 
-  onSearch(query: string) {
-    this.searchInput.set(query);
-  }
-
-  onPageSizeChange(event: Event) {
-    const select = event.target as HTMLSelectElement;
-    this.pageSize.set(Number(select.value));
-    this.pageIndex.set(0);
+  goBack() {
+    this.router.navigate(['/courses']);
   }
 
   nextPage() {
@@ -88,12 +84,18 @@ export class CoursePage implements OnInit {
     if (!this.isFirstPage()) this.pageIndex.update(p => p - 1);
   }
 
+  onPageSizeChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.pageSize.set(Number(select.value));
+    this.pageIndex.set(0);
+  }
+
   toggleSort() {
     this.sortDirection.update(dir => dir === 'asc' ? 'desc' : 'asc');
     this.pageIndex.set(0);
   }
 
-  goBack() {
-    this.router.navigate(['/courses']);
+  onSearch(query: string) {
+    this.searchInput.set(query);
   }
 }

@@ -63,7 +63,6 @@ export function getMockLessonsPage (
   let lessons = MOCK_LESSONS.filter(l => l.courseId === courseId);
 
   if (filter?.trim()) {
-    console.log(`searching for ${filter}`)
     const q = filter.toLowerCase();
     lessons = lessons.filter(l => l.description.toLowerCase().includes(q));
   }
@@ -77,5 +76,3 @@ export function getMockLessonsPage (
 
   return lessons.slice(start, end);
 }
-
-
