@@ -105,6 +105,29 @@ describe('CoursesService', () => {
     expect(allCourses[1].titles.description).toBe('Stay Same');
   })
 
+  it('should handle 404 error', async () => {
+    const coursePromise = service.findCourseById(999);
+
+    const req = httpTestingController.expectOne('/api/courses/999');
+    req.flush('Course not found', {
+      status: 404,
+      statusText: 'Not Found'
+    });
+
+    expect(coursePromise).rejects.toThrow();
+  });
+
+  it('should handle network error ', async () => {
+    const coursePromise = service.findCourseById(1);
+
+    const req = httpTestingController.expectOne('/api/courses/1');
+    req.error(new ProgressEvent('network error'));
+
+    expect(coursePromise).rejects.toThrow();
+  });
+
+
+
 });
 
 
