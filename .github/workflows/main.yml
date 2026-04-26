@@ -1,0 +1,12 @@
+name: FirstWorkflow
+on: 
+  push:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      run: |
+        npm ci
+        npm test
+        npm run build
