@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "server": "ts-node -P ./server/server.tsconfig.json ./server/server.ts"
+    "server": "ts-node -P ./server/server.tsconfig.json ./server/server.ts",
+    "lint": "eslint --ext .tx --fix src"
   },
   "prettier": {
     "printWidth": 100,
