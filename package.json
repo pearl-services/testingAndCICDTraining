@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "server": "ts-node -P ./server/server.tsconfig.json ./server/server.ts",
-    "lint": "eslint --ext .tx --fix src"
+    "lint": "npm run eslint --ext .tx --fix src"
   },
   "prettier": {
     "printWidth": 100,
@@ -32,6 +32,7 @@
     "@angular/forms": "^21.1.1",
     "@angular/platform-browser": "^21.1.1",
     "@angular/router": "^21.1.1",
+    "eslint": "^10.2.1",
     "express": "^5.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
