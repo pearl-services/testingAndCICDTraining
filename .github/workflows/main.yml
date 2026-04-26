@@ -37,6 +37,8 @@ jobs:
         run: npm run build
       - name: Get Artifacts
         uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
           path: |
             dist
             package.json
