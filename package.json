@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "server": "ts-node -P ./server/server.tsconfig.json ./server/server.ts",
-    "lint": "eslint --ext .tx --fix src"
+    "lint": "eslint --ext .ts --fix src"
   },
   "prettier": {
     "printWidth": 100,
