@@ -6,7 +6,7 @@ export default defineConfig({
   test: {
     globals:false,
     environment:'jsdom',
-    include: ['src/**/*.spec.ts'],
+    include: ['./**/*.spec.ts'],
     restoreMocks: true,
     clearMocks:true,
     mockReset:true

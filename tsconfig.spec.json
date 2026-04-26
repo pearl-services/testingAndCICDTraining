@@ -6,7 +6,6 @@
     "outDir": "./out-tsc/spec"
   },
   "include": [
-    "src/**/*.d.ts",
-    "src/**/*.spec.ts"
+    "**/*.spec.ts"
   ]
 }
