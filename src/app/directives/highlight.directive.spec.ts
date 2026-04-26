@@ -2,11 +2,6 @@ import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import { TestBed, ComponentFixture} from '@angular/core/testing';
 import {Component, DebugElement} from '@angular/core'
 import { By } from '@angular/platform-browser'
-import { clickButton, getTableContent } from '../testing/testing-utils'
-import { ActivatedRoute, provideRouter } from '@angular/router';
-import { HttpTestingController, provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing';
-import { CoursesService } from '../services/courses.service';
-import { provideHttpClient } from '@angular/common/http';
 import { HighlightDirective } from './highlight.directive';
 
 @Component({

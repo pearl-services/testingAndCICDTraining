@@ -4,10 +4,9 @@ import {DebugElement} from '@angular/core'
 import { By } from '@angular/platform-browser'
 import {CoursePage} from './course-page'
 import { clickButton, getTableContent } from '../testing/testing-utils'
-import { ActivatedRoute, provideRouter } from '@angular/router';
-import { HttpTestingController, provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from '../services/courses.service';
-import { provideHttpClient } from '@angular/common/http';
+
 import { getMockLessonsPage, MOCK_COURSES, MOCK_LESSONS } from '../testing/testing-data';
 
 

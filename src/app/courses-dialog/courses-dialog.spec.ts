@@ -1,12 +1,9 @@
 import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import { TestBed, ComponentFixture} from '@angular/core/testing';
-import {Component, DebugElement} from '@angular/core'
+import { DebugElement} from '@angular/core'
 import { By } from '@angular/platform-browser'
-import { clickButton, getTableContent } from '../testing/testing-utils'
-import { ActivatedRoute, provideRouter } from '@angular/router';
-import { HttpTestingController, provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing';
+import { clickButton } from '../testing/testing-utils'
 import { CoursesService } from '../services/courses.service';
-import { provideHttpClient } from '@angular/common/http';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { MOCK_COURSES } from '../testing/testing-data';
 import { CoursesDialog } from './courses-dialog';

@@ -4,7 +4,6 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import { provideHttpClient } from "@angular/common/http"
 import { TestBed } from "@angular/core/testing"
 import { createCourse, MOCK_COURSES } from "../testing/testing-data"
-import { endWith } from "rxjs"
 import { Course } from "../model/course"
 
 describe("CoursesService", () => {
