@@ -6,7 +6,7 @@ import {TabsComponent} from './tabs'
 import {MOCK_TABS} from '../testing/testing-data'
 import {TabData} from './tabs.model'
 
-describe.only('TabsComponent', () => {
+describe('TabsComponent', () => {
 
     let fixture: ComponentFixture<TabsComponent>
     let de: DebugElement;
