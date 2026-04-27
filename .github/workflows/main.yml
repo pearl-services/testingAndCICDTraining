@@ -24,6 +24,8 @@ jobs:
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies        
         run: npm ci
+      - name: Run Server
+        run: npm run server
       - name: Run tests
         run: npm test
   build:
