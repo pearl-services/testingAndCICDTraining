@@ -63,6 +63,16 @@ jobs:
           path: |
             dist
             package.json
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: install NodeJS
+        uses: actions/setup-node@v3 
+        continue-on-error: true
+      - name: run linter
+        run: npm run lint          
   deploy:
     needs: build
     runs-on: ubuntu-latest    
@@ -79,6 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output Information
+        continue-on-error: true
         run: |
           echo "Something went wrong"
           echo ${{ toJSON(github) }}
