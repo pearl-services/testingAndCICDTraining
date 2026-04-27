@@ -70,7 +70,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v7
         with: 
-          name:          
+          name: dist-files         
       - name: Deploy
         run: echo "Deploying ..."   
   report:
