@@ -28,12 +28,13 @@ jobs:
         id: run-tests
         run: npm test
       - name: Upload test report
-        if: steps.run-tests.outcome == 'failure'        
+        if: failure() && steps.run-tests.outcome == 'failure'        
         uses: actions/upload-artifact@v7
         with: 
           name: test-report
           path: test.json
   build:
+
     needs: test
     runs-on: ubuntu-latest
     steps: 
@@ -62,10 +63,15 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    steps:
-      - name: Get Artifacts
-        uses: actions/download-artifact@v7
-        with: 
-          name: test-report         
+    steps:            
       - name: Deploy
         run: echo "Deploying ..."   
+  report:
+    needs: [test, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output Information
+        run: |
+          echo "Something went wrong"
+          echo ${{ github}}
