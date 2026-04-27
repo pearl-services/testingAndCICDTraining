@@ -21,7 +21,7 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
-  deploy:
+  build:
     needs: test
     runs-on: ubuntu-latest
     steps: 
@@ -35,12 +35,20 @@ jobs:
         run: npm ci
       - name: Build project
         run: npm run build
-      - name: Get Artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
           name: dist-files
           path: |
             dist
             package.json
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Artifacts
+        uses: actions/download-artifact@v7
+        with: 
+          name: dist-files          
       - name: Deploy
         run: echo "Deploying ..."   
