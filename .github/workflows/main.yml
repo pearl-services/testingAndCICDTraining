@@ -18,11 +18,13 @@ jobs:
         with:
           node-version: 20
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies        
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci 
       - name: Run tests
         id: run-tests
@@ -44,11 +46,13 @@ jobs:
         with:
           node-version: 20
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v4
         with:
-            path: ~/.npm
+            path: node_modules
             key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build project
         run: npm run build
@@ -61,8 +65,12 @@ jobs:
             package.json
   deploy:
     needs: build
-    runs-on: ubuntu-latest
-    steps:            
+    runs-on: ubuntu-latest    
+    steps:  
+      - name: Download Artifacts
+        uses: actions/download-artifact@v7
+        with: 
+          name:          
       - name: Deploy
         run: echo "Deploying ..."   
   report:
