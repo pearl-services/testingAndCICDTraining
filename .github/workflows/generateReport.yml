@@ -19,6 +19,6 @@ jobs:
           if: ${{inputs.artifact-name == 'default'}}
           run: |
             echo "Something went wrong."
-            echo ${{ toJSON(github) }}
+            echo toJSON($GITHUB_OUTPUT)
       
     
