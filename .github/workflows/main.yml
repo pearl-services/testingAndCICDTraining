@@ -109,7 +109,8 @@ jobs:
         if: needs.test.result == 'failure'
         uses: ./.github/workflows/generateReport        
       - name: Download Linter artifacts
-        if: needs.lint.result == 'failure'        
-        uses: ./.github/workflows/generateReport
-        with:           
-            artifact-name: lint-files   
+        if: needs.lint.result == 'failure' 
+        run: echo "Linter Failure"       
+        # uses: ./.github/workflows/generateReport
+        # with:           
+        #     artifact-name: lint-files   
