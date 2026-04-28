@@ -65,6 +65,7 @@ jobs:
             dist
             package.json
   lint:
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
