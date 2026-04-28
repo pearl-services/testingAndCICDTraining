@@ -76,20 +76,21 @@ jobs:
         id: cache
         uses: actions/cache@v4
         with:
-            path: node_modules
-            key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
-        continue-on-error: true
       - name: run linter
         id: run-linter
-        run: npm run lint 
-      - name: Upload Artifacts
+        run: npm run lint
+        continue-on-error: true
+      - name: Upload Lint Artifacts
+        if: steps.run-linter.outcome == 'failure'
         uses: actions/upload-artifact@v7
         with:
-          name: lint-files   
-          path: linterFile             
+          name: lint-files
+          path: .           
   deploy:
     needs: build
     runs-on: ubuntu-latest    
