@@ -88,7 +88,8 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: lint-files                
+          name: lint-files   
+          path: linterFile             
   deploy:
     needs: build
     runs-on: ubuntu-latest    
