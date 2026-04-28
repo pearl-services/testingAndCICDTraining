@@ -13,6 +13,8 @@ jobs:
     steps:    
       - name: Get Code
         uses: actions/checkout@v3
+      - name: Get Directory Listing
+        run: ls -R
       - name: Install NodeJS
         uses: actions/setup-node@v3
         with:
@@ -28,7 +30,7 @@ jobs:
         run: npm ci 
       - name: Run tests
         id: run-tests
-        run: npm test
+        run: npx ng test --watch=false --browsers=ChromeHeadless
       - name: Upload test report
         if: failure() && steps.run-tests.outcome == 'failure'        
         uses: actions/upload-artifact@v7
