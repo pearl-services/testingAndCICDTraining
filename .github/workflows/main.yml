@@ -30,7 +30,7 @@ jobs:
         run: npm ci 
       - name: Run tests
         id: run-tests
-        run: npx ng test --watch=false --browsers=ChromeHeadless
+        run: ng test
       - name: Upload test report
         if: failure() && steps.run-tests.outcome == 'failure'        
         uses: actions/upload-artifact@v7
