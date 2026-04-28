@@ -7,12 +7,26 @@ on:
     branches:    
       - main    
   workflow_dispatch: 
-jobs:  
+jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - name: getDependencies
-        uses: ./.github/workflows/installDependencies.yml@main
+    steps:    
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Get Directory Listing
+        run: ls -R
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies                
+        run: npm ci 
       - name: Run tests
         id: run-tests
         run: npx ng test
