@@ -104,12 +104,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output Information
-        if: failure() && needs.test.result == 'failure'
+        if: needs.test.result == 'failure'
         run: |
           echo "Something went wrong."
           echo ${{ toJSON(github) }}
       - name: Download Linter artifacts
-        if: failure() && needs.lint.result == 'failure'        
+        if: needs.lint.result == 'failure'        
         uses: actions/download-artifact@v7
         with: 
           name: lint-files   
