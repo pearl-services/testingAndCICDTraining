@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: getDependencies
-        uses: ./.github/workflows/installDependencies.yml@478e2c9c1f26d59e3f4ece7dac766680e6dfa200
+        uses: ./.github/workflows/installDependencies.yml@main
       - name: Run tests
         id: run-tests
         run: npx ng test
