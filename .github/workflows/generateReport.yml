@@ -1,0 +1,20 @@
+name: generateReport
+on: 
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: The name of the artifact
+        required: false
+        default: github
+        type: string 
+jobs: 
+    CreateReport:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Output Information
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.artifact-name }}
+           
+      
+    

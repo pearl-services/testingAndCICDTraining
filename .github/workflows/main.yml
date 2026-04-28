@@ -110,8 +110,9 @@ jobs:
         run: |
           echo "Something went wrong."
           echo ${{ toJSON(github) }}
+        
       - name: Download Linter artifacts
         if: needs.lint.result == 'failure'        
-        uses: actions/download-artifact@v7
+        uses: ./.github/workflows/generateReport
         with: 
           name: lint-files   
