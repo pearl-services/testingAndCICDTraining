@@ -102,6 +102,6 @@ jobs:
       - name: Output Information
         continue-on-error: true
         run: |
-          echo "Something went wrong"
+          echo "Something went wrong."
           echo ${{ toJSON(github) }}
           
