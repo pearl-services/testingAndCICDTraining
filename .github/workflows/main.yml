@@ -114,5 +114,5 @@ jobs:
       - name: Download Linter artifacts
         if: needs.lint.result == 'failure'        
         uses: ./.github/workflows/generateReport
-        with: 
-          name: lint-files   
+        with:           
+            artifact-name: lint-files   

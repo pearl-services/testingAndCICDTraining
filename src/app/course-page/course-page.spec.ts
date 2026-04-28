@@ -6,7 +6,6 @@ import {CoursePage} from './course-page'
 import { clickButton, getTableContent } from '../testing/testing-utils'
 import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from '../services/courses.service';
-
 import { getMockLessonsPage, MOCK_COURSES, MOCK_LESSONS } from '../testing/testing-data';
 
 

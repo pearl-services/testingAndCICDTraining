@@ -4,8 +4,7 @@ on:
     inputs:
       artifact-name:
         description: The name of the artifact
-        required: false
-        default: github
+        required: false        
         type: string 
 jobs: 
     CreateReport:

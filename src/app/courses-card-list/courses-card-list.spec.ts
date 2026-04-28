@@ -9,7 +9,7 @@ import { CoursesDialog } from '../courses-dialog/courses-dialog';
 
 describe('CoursesCardList', () => {
 
-    let component: CoursesCardList
+    // let component: CoursesCardList
     let fixture: ComponentFixture<CoursesCardList>  
     let de: DebugElement
 
