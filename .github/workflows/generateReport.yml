@@ -4,16 +4,21 @@ on:
     inputs:
       artifact-name:
         description: The name of the artifact
-        required: false        
+        required: false      
         type: string 
 jobs: 
     CreateReport:
       runs-on: ubuntu-latest
-      steps:
-      - name: Output Information
-        uses: actions/download-artifact@v7
-        with:
-          name: ${{ inputs.artifact-name }}
-           
+      steps:          
+        - name: Output Information for non-default inputs
+          if: ${{inputs.artifact-name != 'default'}}
+          uses: actions/download-artifact@v7
+          with:
+            name: ${{ inputs.artifact-name }}
+        - name: Output Information for defaujlt input
+          if: ${{inputs.artifact-name == 'default'}}
+          run: |
+            echo "Something went wrong."
+            echo ${{ toJSON(github) }}
       
     

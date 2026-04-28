@@ -107,10 +107,7 @@ jobs:
     steps:
       - name: Output Information
         if: needs.test.result == 'failure'
-        run: |
-          echo "Something went wrong."
-          echo ${{ toJSON(github) }}
-        
+        uses: ./.github/workflows/generateReport        
       - name: Download Linter artifacts
         if: needs.lint.result == 'failure'        
         uses: ./.github/workflows/generateReport
