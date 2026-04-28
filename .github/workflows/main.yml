@@ -94,12 +94,12 @@ jobs:
       - name: Deploy
         run: echo "Deploying ..."   
   report:
-    needs: [test, lint]
-    if: failure()
+    needs: test
+     
     runs-on: ubuntu-latest
     steps:
       - name: Output Information
-        continue-on-error: true
+        if: failure() && steps.run-tests.outcome == 'failure'
         run: |
           echo "Something went wrong."
           echo ${{ toJSON(github) }}
